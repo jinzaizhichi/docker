@@ -8,7 +8,6 @@ import (
 	"github.com/moby/moby/api/types"
 	"github.com/moby/moby/api/types/container"
 	"github.com/moby/moby/api/types/events"
-	"github.com/moby/moby/api/types/image"
 	"github.com/moby/moby/api/types/network"
 	"github.com/moby/moby/api/types/plugin"
 	"github.com/moby/moby/api/types/registry"
@@ -105,18 +104,18 @@ type DistributionAPIClient interface {
 
 // ImageAPIClient defines API client methods for the images
 type ImageAPIClient interface {
-	ImageBuild(ctx context.Context, context io.Reader, options ImageBuildOptions) (ImageBuildResponse, error)
+	ImageBuild(ctx context.Context, context io.Reader, options ImageBuildOptions) (ImageBuildResult, error)
 	BuildCachePrune(ctx context.Context, opts BuildCachePruneOptions) (BuildCachePruneResult, error)
-	BuildCancel(ctx context.Context, id string, opts BuildCancelOptions) error
-	ImageCreate(ctx context.Context, parentReference string, options ImageCreateOptions) (io.ReadCloser, error)
-	ImageImport(ctx context.Context, source ImageImportSource, ref string, options ImageImportOptions) (io.ReadCloser, error)
+	BuildCancel(ctx context.Context, id string, opts BuildCancelOptions) (BuildCancelResult, error)
+	ImageCreate(ctx context.Context, parentReference string, options ImageCreateOptions) (ImageCreateResult, error)
+	ImageImport(ctx context.Context, source ImageImportSource, ref string, options ImageImportOptions) (ImageImportResult, error)
 
-	ImageList(ctx context.Context, options ImageListOptions) ([]image.Summary, error)
+	ImageList(ctx context.Context, options ImageListOptions) (ImageListResult, error)
 	ImagePull(ctx context.Context, ref string, options ImagePullOptions) (ImagePullResponse, error)
 	ImagePush(ctx context.Context, ref string, options ImagePushOptions) (ImagePushResponse, error)
-	ImageRemove(ctx context.Context, image string, options ImageRemoveOptions) ([]image.DeleteResponse, error)
-	ImageSearch(ctx context.Context, term string, options ImageSearchOptions) ([]registry.SearchResult, error)
-	ImageTag(ctx context.Context, image, ref string) error
+	ImageRemove(ctx context.Context, image string, options ImageRemoveOptions) (ImageRemoveResult, error)
+	ImageSearch(ctx context.Context, term string, options ImageSearchOptions) (ImageSearchResult, error)
+	ImageTag(ctx context.Context, options ImageTagOptions) (ImageTagResult, error)
 	ImagesPrune(ctx context.Context, opts ImagePruneOptions) (ImagePruneResult, error)
 
 	ImageInspect(ctx context.Context, image string, _ ...ImageInspectOption) (ImageInspectResult, error)
@@ -160,14 +159,14 @@ type PluginAPIClient interface {
 
 // ServiceAPIClient defines API client methods for the services
 type ServiceAPIClient interface {
-	ServiceCreate(ctx context.Context, service swarm.ServiceSpec, options ServiceCreateOptions) (swarm.ServiceCreateResponse, error)
-	ServiceInspectWithRaw(ctx context.Context, serviceID string, options ServiceInspectOptions) (swarm.Service, []byte, error)
-	ServiceList(ctx context.Context, options ServiceListOptions) ([]swarm.Service, error)
-	ServiceRemove(ctx context.Context, serviceID string) error
-	ServiceUpdate(ctx context.Context, serviceID string, version swarm.Version, service swarm.ServiceSpec, options ServiceUpdateOptions) (swarm.ServiceUpdateResponse, error)
-	ServiceLogs(ctx context.Context, serviceID string, options ContainerLogsOptions) (io.ReadCloser, error)
-	TaskLogs(ctx context.Context, taskID string, options ContainerLogsOptions) (io.ReadCloser, error)
-	TaskInspect(ctx context.Context, taskID string) (TaskInspectResult, error)
+	ServiceCreate(ctx context.Context, service swarm.ServiceSpec, options ServiceCreateOptions) (ServiceCreateResult, error)
+	ServiceInspect(ctx context.Context, serviceID string, options ServiceInspectOptions) (ServiceInspectResult, error)
+	ServiceList(ctx context.Context, options ServiceListOptions) (ServiceListResult, error)
+	ServiceRemove(ctx context.Context, serviceID string, options ServiceRemoveOptions) (ServiceRemoveResult, error)
+	ServiceUpdate(ctx context.Context, serviceID string, version swarm.Version, service swarm.ServiceSpec, options ServiceUpdateOptions) (ServiceUpdateResult, error)
+	ServiceLogs(ctx context.Context, serviceID string, options ServiceLogsOptions) (ServiceLogsResult, error)
+	TaskLogs(ctx context.Context, taskID string, options TaskLogsOptions) (TaskLogsResult, error)
+	TaskInspect(ctx context.Context, taskID string, options TaskInspectOptions) (TaskInspectResult, error)
 	TaskList(ctx context.Context, options TaskListOptions) (TaskListResult, error)
 }
 
